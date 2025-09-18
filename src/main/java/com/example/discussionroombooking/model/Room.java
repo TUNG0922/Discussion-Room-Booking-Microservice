@@ -21,14 +21,17 @@ public class Room {
 
     private String name;
 
-    private String status;
+    private String status; // available | booked
+
+    @Column(name = "booked_by")
+    private String bookedBy; // <-- NEW field to store username
 
     @Column(name = "created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") // <-- format for JSON
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") // <-- format for JSON
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
 
     // getters and setters
@@ -40,6 +43,9 @@ public class Room {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getBookedBy() { return bookedBy; }
+    public void setBookedBy(String bookedBy) { this.bookedBy = bookedBy; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

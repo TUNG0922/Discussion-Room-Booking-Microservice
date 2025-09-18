@@ -1,7 +1,9 @@
 package com.example.discussionroombooking.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,5 +40,24 @@ public class RoomController {
     @PutMapping("/{id}")
     public Room updateRoomStatus(@PathVariable Long id, @RequestBody Room updatedRoom) {
         return roomService.updateRoomStatus(id, updatedRoom.getStatus());
+    }
+
+    // ✅ Book a room and save username
+    @PutMapping("/{id}/book")
+    public ResponseEntity<Room> bookRoom(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+        String username = payload.get("username");
+        Room bookedRoom = roomService.bookRoom(id, username);
+        return ResponseEntity.ok(bookedRoom);
+    }
+
+    // Cancel booking: set status = Available and bookedBy = null
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Room> cancelBooking(@PathVariable Long id) {
+        Room room = roomService.cancelBooking(id);
+        if (room != null) {
+            return ResponseEntity.ok(room);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

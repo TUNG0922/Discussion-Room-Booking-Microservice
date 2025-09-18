@@ -30,4 +30,25 @@ public class RoomService {
         room.setStatus(status);
         return roomRepository.save(room);
     }
+
+    public Room bookRoom(Long id, String username) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        if ("booked".equalsIgnoreCase(room.getStatus())) {
+            throw new RuntimeException("Room already booked!");
+        }
+
+        room.setStatus("booked");
+        room.setBookedBy(username);
+        return roomRepository.save(room);
+    }
+    
+    public Room cancelBooking(Long id) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+        room.setStatus("Available");
+        room.setBookedBy(null);
+        return roomRepository.save(room);
+    }
 }
