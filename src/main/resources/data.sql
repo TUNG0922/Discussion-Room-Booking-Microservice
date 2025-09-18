@@ -1,0 +1,8 @@
+INSERT INTO room (name, status, created_at, updated_at) VALUES
+('Room A', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room B', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room C', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room D', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room E', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room F', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Room G', 'available', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
