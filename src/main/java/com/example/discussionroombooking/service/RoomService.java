@@ -1,5 +1,6 @@
 package com.example.discussionroombooking.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,11 +17,19 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
+    public Room getRoomById(Long id) {
+        return roomRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Room not found"));
+    }
+
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
     public Room createRoom(Room room) {
+        room.setStatus("available");
+        room.setCreatedAt(LocalDateTime.now());
+        room.setUpdatedAt(LocalDateTime.now());
         return roomRepository.save(room);
     }
 
@@ -28,10 +37,11 @@ public class RoomService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         room.setStatus(status);
+        room.setUpdatedAt(LocalDateTime.now());
         return roomRepository.save(room);
     }
 
-    public Room bookRoom(Long id, String username) {
+    public Room bookRoom(Long id, String username, String startTime, String endTime) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
@@ -41,14 +51,21 @@ public class RoomService {
 
         room.setStatus("booked");
         room.setBookedBy(username);
+        room.setStartTime(startTime);
+        room.setEndTime(endTime);
+        room.setUpdatedAt(LocalDateTime.now());
+
         return roomRepository.save(room);
     }
-    
+
     public Room cancelBooking(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
-        room.setStatus("Available");
+        room.setStatus("available");
         room.setBookedBy(null);
+        room.setStartTime(null);
+        room.setEndTime(null);
+        room.setUpdatedAt(LocalDateTime.now());
         return roomRepository.save(room);
     }
 }
