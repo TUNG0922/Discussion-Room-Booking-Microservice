@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class DiscussionRoomBookingApplication {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DiscussionRoomBookingApplication.class, args);
 	}

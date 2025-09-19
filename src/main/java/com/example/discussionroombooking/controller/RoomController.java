@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.discussionroombooking.model.BookedRoom;
 import com.example.discussionroombooking.model.Room;
 import com.example.discussionroombooking.service.RoomService;
 
@@ -26,11 +27,11 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping("/{id}")  // <-- Add this
+    @GetMapping("/{id}")
     public Room getRoom(@PathVariable Long id) {
         return roomService.getRoomById(id);
     }
-    
+
     @GetMapping
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
@@ -41,22 +42,26 @@ public class RoomController {
         return roomService.updateRoomStatus(id, updatedRoom.getStatus());
     }
 
+    // Book a room without DTO
     @PutMapping("/{id}/book")
-    public ResponseEntity<Room> bookRoom(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        String username = payload.get("username");
-        String startTime = payload.get("startTime");
-        String endTime = payload.get("endTime");
-        Room bookedRoom = roomService.bookRoom(id, username, startTime, endTime);
+    public ResponseEntity<BookedRoom> bookRoom(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+        String bookedBy = body.get("bookedBy");
+        String startTime = body.get("startTime");
+        String endTime = body.get("endTime");
+
+        if (bookedBy == null || startTime == null || endTime == null) {
+            throw new RuntimeException("Missing booking parameters");
+        }
+
+        BookedRoom bookedRoom = roomService.bookRoom(id, bookedBy, startTime, endTime);
         return ResponseEntity.ok(bookedRoom);
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<Room> cancelBooking(@PathVariable Long id) {
-        Room room = roomService.cancelBooking(id);
-        if (room != null) {
-            return ResponseEntity.ok(room);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<BookedRoom> cancelBooking(@PathVariable Long id) {
+        BookedRoom bookedRoom = roomService.cancelBooking(id);
+        return ResponseEntity.ok(bookedRoom);
     }
 }

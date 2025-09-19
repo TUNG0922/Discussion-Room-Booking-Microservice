@@ -12,16 +12,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "room")
-public class Room {
+@Table(name = "booked_room")
+public class BookedRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String name; // room name
 
-    private String status; // available | booked
+    private String status; // booked | canceled
+
+    @Column(name = "booked_by")
+    private String bookedBy;
+
+    @Column(name = "start_time")
+    private String startTime; // HH:mm format
+
+    @Column(name = "end_time")
+    private String endTime; // HH:mm format
 
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -54,6 +63,30 @@ public class Room {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getBookedBy() {
+        return bookedBy;
+    }
+
+    public void setBookedBy(String bookedBy) {
+        this.bookedBy = bookedBy;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public LocalDateTime getCreatedAt() {
